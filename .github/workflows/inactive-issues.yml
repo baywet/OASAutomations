@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Label issues with no recent activity
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: scripts/label-no-recent.ps1
         shell: pwsh
       - run: scripts/close-no-recent.ps1
