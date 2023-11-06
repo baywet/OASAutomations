@@ -32,5 +32,5 @@ jobs:
     - name: Create agenda issue
       run: gh issue create -l ${{ env.LABEL }} -t "${{ env.TITLE_PREFIX }}`date --date='next Thu' +'%A %d %B %Y'`" -F .github/templates/agenda.md
 
-    # - name: Close old agenda issues
-    #   run: gh issue list -l ${{ env.LABEL }} --author "" --json number | ConvertFrom-Json | Where-Object { $_.title -like "${{ env.TITLE_PREFIX }}*" -and [datetime]::Parse($rawDate) -le [datetime]::UtcNow} | ForEach-Object { gh issue close $_.number }
+    - name: Close old agenda issues
+      run: gh issue list -l ${{ env.LABEL }} --author "app/github-actions" --json number | ConvertFrom-Json | Where-Object { $_.title -like "${{ env.TITLE_PREFIX }}*" -and [datetime]::Parse([regex]::Replace($_.title.Replace("${{ env.TITLE_PREFIX }}", ""), "\([^)]+\)", "")) -le [datetime]::UtcNow} | ForEach-Object { gh issue close $_.number }
