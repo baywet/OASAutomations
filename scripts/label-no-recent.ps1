@@ -6,7 +6,7 @@ foreach($oldIssue in $oldIssues) {
 		$lastCommentDate = [datetime]::Parse($oldIssue.createdAt)
 
 	} else {
-		$lastCommentDate = [datetime]::Parse($lastComment.created_at)
+		$lastCommentDate = [datetime]::Parse($lastComment.createdAt)
 	}
 	$lastLabelEvent = gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "/repos/$($Env:ORG_NAME)/$($Env:REPO_NAME)/issues/$($oldIssue.number)/events?per_page=100" | ConvertFrom-Json | Where-Object {$_.event -eq "labeled" -and $_.label.name -eq "$Env:NEEDS_AUTHOR_FEEDBACK_LABEL"} | Select-Object -Last 1
 	$lastLabelEventDate = [datetime]::Parse($lastLabelEvent.created_at)
