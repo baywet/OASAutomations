@@ -17,8 +17,8 @@ env:
   NO_RECENT_ACTIVITY_LABEL: "No recent activity"
   NO_RECENT_ACTIVITY_DURATION: "00:00:01"
   NO_RECENT_ACTIVITY_DURATION_CLOSE: "00:00:01"
-  ORG_NAME: "baywet"
-  REPO_NAME: "OASAutomations"
+  ORG_NAME: ${{ github.repository_owner }}
+  REPO_NAME: ${{ github.event.repository.name }}
   NO_RECENT_ACTIVITY_COMMENT: "This issue has been labeled because there has been no recent activity. It will be closed if no further activity occurs within 1 day."
 
 
