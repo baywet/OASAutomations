@@ -8,6 +8,8 @@ on:
 permissions:
   issues: write
 
+name: Label and close issues with no recent activity
+
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NEEDS_ATTENTION_LABEL: "Needs attention"
