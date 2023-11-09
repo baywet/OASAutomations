@@ -17,6 +17,9 @@ on:
 permissions:
   issues: write
 
+env:
+  POST_MEETING_CLOSE_DURATION_IN_DAYS: 10
+
 jobs:
   agenda:
     env:
@@ -33,5 +36,5 @@ jobs:
       run: gh issue create -l ${{ env.LABEL }} -t "${{ env.TITLE_PREFIX }}`date --date='next Thu' +'%A %d %B %Y'`" -F .github/templates/agenda.md
 
     - name: Close old agenda issues
-      run: gh issue list -l ${{ env.LABEL }} --author "app/github-actions" --json number,title | ConvertFrom-Json | Where-Object { $_.title -like "${{ env.TITLE_PREFIX }}*" -and [datetime]::Parse([regex]::Replace($_.title.Replace("${{ env.TITLE_PREFIX }}", ""), "\([^)]+\)", "")) -le [datetime]::UtcNow} | ForEach-Object { gh issue close $_.number }
+      run: gh issue list -l ${{ env.LABEL }} --author "app/github-actions" --json number,title | ConvertFrom-Json | Where-Object { $_.title -like "${{ env.TITLE_PREFIX }}*" -and ([datetime]::Parse([regex]::Replace($_.title.Replace("${{ env.TITLE_PREFIX }}", ""), "\([^)]+\)", "")) - [datetime]::UtcNow) -ge [timespan]::FromDays([int]::Parse("${{ env.POST_MEETING_CLOSE_DURATION_IN_DAYS }}"))} | ForEach-Object { gh issue close $_.number }
       shell: pwsh
