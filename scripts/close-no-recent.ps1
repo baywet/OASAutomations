@@ -11,7 +11,7 @@ foreach($oldIssue in $oldIssues) {
 	$lastLabelEventDate = $lastLabelEvent.created_at
 	if ($null -ne $lastCommentDate -and $lastCommentDate -gt $lastLabelEventDate) {
 		gh issue edit $oldIssue.number --remove-label "$Env:NO_RECENT_ACTIVITY_LABEL" --remove-label "$Env:NEEDS_AUTHOR_FEEDBACK_LABEL" --add-label "$Env:NEEDS_ATTENTION_LABEL"
-	} elseif (([datetime]::UtcNow - $lastCommentDate) -ge $inactivityDelay) {
+	} elseif (([datetime]::UtcNow - $lastLabelEventDate) -ge $inactivityDelay) {
 		gh issue close $oldIssue.number -r "not planned"
 	}
 }
