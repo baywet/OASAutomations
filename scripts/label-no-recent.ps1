@@ -1,5 +1,5 @@
 $inactivityDelay = [timespan]::FromMinutes([int]::Parse($Env:NO_RECENT_ACTIVITY_DURATION_IN_DAYS))
-$oldIssues = gh issue list --label "$Env:NEEDS_AUTHOR_FEEDBACK_LABEL" --state open --limit 100 --json number,author,createdAt | ConvertFrom-Json | Where-Object {$_.labels.name -notcontains $Env:NO_RECENT_ACTIVITY_LABEL }
+$oldIssues = gh issue list --label "$Env:NEEDS_AUTHOR_FEEDBACK_LABEL" --state open --limit 100 --json number,author,createdAt,labels | ConvertFrom-Json | Where-Object {$_.labels.name -notcontains $Env:NO_RECENT_ACTIVITY_LABEL }
 foreach($oldIssue in $oldIssues) {
 	$lastComment = gh issue view $oldIssue.number --json comments | ConvertFrom-Json | Select-Object -ExpandProperty comments | Where-Object {$_.author.login -eq $oldIssue.author.login} | Select-Object -Last 1
 	if($null -eq $lastComment) {
